@@ -1,16 +1,24 @@
 /* 熊猫心情日记官网 / 法务站样式
    设计基调：安静、克制、不打扰 —— 与 App「树洞」气质一致。
    零外部资源（无字体 CDN、无 JS），CSP script-src 'none' 下也能完整渲染。
-   颜色与心情数值取自 App 源码 lib/data/models/mood.dart 与 lib/theme/app_theme.dart，
-   保证站点与 App 视觉同一套语言。 */
+
+   🔴 主色 #FE6655 取自**2020 年上架的老版 App 图标**，不是自拟色。
+   老版已积累 4.61 分 / 18 条评价，这套配色经过 6 年市场验证，
+   改品牌色属于要向市场解释的动作 —— 没有强理由不要动。
+   浅色档 #FE6655 / 深档 #D8433A / 底 #FFF0EE 由此推导。
+   心情色仍与 lib/data/models/mood.dart 的 Mood.color 逐一对齐。 */
 
 :root {
-  --brand: #2f6f62;          /* 熊猫竹青（App 主色） */
-  --brand-deep: #245449;
-  --brand-soft: #e8f2ef;
-  --panda-ink: #2b2b33;
-  --panda-white: #fdfdfd;
-  --panda-paper: #fdfbf7;   /* 熊猫抱的日记本 */
+  /* 主色取自 2020 上架的老版 App 图标（#FE6655，评分 4.61）——
+     已过 6 年市场验证的品牌资产，比自拟色更有依据。
+     深色/浅色档由此推导，保证按钮、链接、徽章同一色相。 */
+  --brand: #FE6655;          /* 老版 logo 主背景 */
+  --brand-deep: #D8433A;    /* hover / 强调 */
+  --brand-soft: #FFF0EE;    /* 浅色底 */
+  --panda-ink: #3E3E3E;     /* 老版 logo 的黑眼圈色 */
+  --panda-white: #FFFFFF;
+  --panda-paper: #FFFFFF;
+  --logo-accent: #FFDEB2;   /* 老版书签的奶油黄 */
   --ink: #1f2328;
   --ink-soft: #57606a;
   --line: #e3e8ea;
@@ -31,17 +39,17 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --brand: #7fc8b6;
-    --brand-deep: #9ad8c8;
-    --brand-soft: #1c2a27;
+    --brand: #FF8878;          /* logo 色在暗底上的提亮档 */
+    --brand-deep: #FFA79A;
+    --brand-soft: #3A1F1D;
     --panda-ink: #3a3f46;   /* 暗色下纯黑会和背景糊在一起，抬到 #3a3f46 */
     --panda-white: #e9eceb;
     --panda-paper: #22292c;
     --ink: #e8eceb;
     --ink-soft: #a8b2ae;
-    --line: #2a3230;
-    --bg: #101514;
-    --bg-soft: #161d1b;
+    --line: #33272A;
+    --bg: #171110;
+    --bg-soft: #1E1618;
   }
 }
 
@@ -90,7 +98,15 @@ body {
 
 .brand svg { width: 30px; height: 30px; display: block; }
 
-.brand-mark { flex: none; }
+/* brand mark 现在是新 logo 的 PNG（不再是内嵌 SVG），
+   必须给 border-radius 让它在导航栏里也有圆角，否则是个方块。 */
+.brand-mark {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: block;
+}
 
 .nav-links a {
   color: var(--ink-soft);
@@ -341,6 +357,13 @@ a { color: var(--brand); }
   width: 100%;
   height: auto;
   display: block;
+  /* V3 表情是竖版（380x512，比例 0.742）。
+     `width:100% + height:auto` 会等比缩放，比例是对的；
+     但 7 列布局下单卡净宽只有约 100px，缩到 74px 高的熊猫
+     在移动端几乎看不清表情。给一个最小高度兜底，
+     让窄屏下 panda 主体不至于缩成一个小点。 */
+  min-height: 92px;
+  object-fit: contain;
   /* 图本身已透明，这里只给个极淡的暖色晕，凸显轮廓 */
   background: radial-gradient(circle at 50% 78%,
     color-mix(in srgb, var(--c) 13%, transparent), transparent 68%);

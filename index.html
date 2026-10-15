@@ -10,38 +10,17 @@
 <meta property="og:description" content="点一下记录今天的心情，想写再写。全部只保存在你的设备上。">
 <meta property="og:url" content="https://panda-mood-diary-privacy.pages.dev/">
 <meta property="og:type" content="website">
-<link rel="icon" href="./assets/panda.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./assets/panda.svg">
+<link rel="icon" href="./assets/panda/favicon-180.png" type="image/png" sizes="180x180">
+<link rel="apple-touch-icon" href="./assets/panda/favicon-180.png">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-<!-- 心情图标：与 App 内 MaterialIcons 字形逐点一致，勿改成系统 Emoji -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <g id="panda-face">
-      <circle cx="16" cy="15" r="9" fill="var(--panda-ink, #2B2622)"/>
-      <circle cx="48" cy="15" r="9" fill="var(--panda-ink, #2B2622)"/>
-      <circle cx="32" cy="33" r="22" fill="var(--panda-white, #fff)" stroke="var(--panda-ink, #2B2622)" stroke-width="2.5"/>
-      <ellipse cx="23" cy="30" rx="7.5" ry="8.5" fill="var(--panda-ink, #2B2622)" transform="rotate(-16 23 30)"/>
-      <ellipse cx="41" cy="30" rx="7.5" ry="8.5" fill="var(--panda-ink, #2B2622)" transform="rotate(16 41 30)"/>
-      <circle cx="23.5" cy="30.5" r="2.6" fill="var(--panda-white, #fff)"/>
-      <circle cx="41" cy="30.5" r="2.6" fill="var(--panda-white, #fff)"/>
-      <circle cx="24.2" cy="31" r="1.3" fill="var(--panda-ink, #2B2622)"/>
-      <circle cx="41.7" cy="31" r="1.3" fill="var(--panda-ink, #2B2622)"/>
-      <path d="M28.4 40.2c0-1.6 1.6-2.8 3.6-2.8s3.6 1.2 3.6 2.8-1.6 2.6-3.6 2.6-3.6-1-3.6-2.6Z" fill="var(--panda-ink, #2B2622)"/>
-      <path d="M32 42.8v2.1M32 44.9c-1.5 0-2.7-.9-3.2-2.2M32 44.9c1.5 0 2.7-.9 3.2-2.2"
-            fill="none" stroke="var(--panda-ink, #2B2622)" stroke-width="1.7" stroke-linecap="round"/>
-      <ellipse cx="15.5" cy="40" rx="3.6" ry="2.4" fill="#F2B33D" opacity=".45"/>
-      <ellipse cx="48.5" cy="40" rx="3.6" ry="2.4" fill="#F2B33D" opacity=".45"/>
-    </g>
-  </defs>
-</svg>
 
 <header class="site-head">
   <nav>
     <a class="brand" href="./index.html">
-      <svg class="brand-mark" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><use href="#panda-face"/></svg>
+      <img class="brand-mark" src="./assets/panda/favicon-180.png" alt="" width="30" height="30">
       <span>熊猫心情日记</span>
     </a>
     <span class="nav-links">
@@ -129,13 +108,13 @@
     <h2>同一只熊猫，七种心情</h2>
     <p class="section-lead">App 里选哪个，首页就露出哪一只。不需要你写任何字，点一下就算今天记完了。</p>
     <ul class="pandas">
-      <li class="panda" style="--c:var(--mood-happy)"><img src="./assets/panda/panda-happy-512.png" alt="熊猫开心的表情" width="200" height="200" loading="lazy"><b>开心</b></li>
-      <li class="panda" style="--c:var(--mood-calm)"><img src="./assets/panda/panda-calm-512.png" alt="熊猫平静的表情" width="200" height="200" loading="lazy"><b>平静</b></li>
-      <li class="panda" style="--c:var(--mood-fulfilled)"><img src="./assets/panda/panda-fulfilled-512.png" alt="熊猫充实的表情" width="200" height="200" loading="lazy"><b>充实</b></li>
-      <li class="panda" style="--c:var(--mood-surprised)"><img src="./assets/panda/panda-surprised-512.png" alt="熊猫惊喜的表情" width="200" height="200" loading="lazy"><b>惊喜</b></li>
-      <li class="panda" style="--c:var(--mood-low)"><img src="./assets/panda/panda-low-512.png" alt="熊猫低落的表情" width="200" height="200" loading="lazy"><b>低落</b></li>
-      <li class="panda" style="--c:var(--mood-lonely)"><img src="./assets/panda/panda-lonely-512.png" alt="熊猫孤独的表情，头顶一朵小云" width="200" height="200" loading="lazy"><b>孤独</b></li>
-      <li class="panda" style="--c:var(--mood-irritated)"><img src="./assets/panda/panda-irritated-512.png" alt="熊猫烦躁的表情，旁边有几道闪电" width="200" height="200" loading="lazy"><b>烦躁</b></li>
+      <li class="panda" style="--c:var(--mood-happy)"><img src="./assets/panda/panda-happy-512.png" alt="熊猫开心的表情，咧开嘴笑" width="150" height="202" loading="lazy"><b>开心</b></li>
+      <li class="panda" style="--c:var(--mood-calm)"><img src="./assets/panda/panda-calm-512.png" alt="熊猫平静的表情，眼睛弯弯地笑着" width="150" height="202" loading="lazy"><b>平静</b></li>
+      <li class="panda" style="--c:var(--mood-fulfilled)"><img src="./assets/panda/panda-fulfilled-512.png" alt="熊猫充实的表情，满足地眯起眼睛" width="150" height="202" loading="lazy"><b>充实</b></li>
+      <li class="panda" style="--c:var(--mood-surprised)"><img src="./assets/panda/panda-surprised-512.png" alt="熊猫惊喜的表情，睁大眼睛张着嘴" width="150" height="202" loading="lazy"><b>惊喜</b></li>
+      <li class="panda" style="--c:var(--mood-low)"><img src="./assets/panda/panda-low-512.png" alt="熊猫低落的表情，眉毛耷拉着" width="150" height="202" loading="lazy"><b>低落</b></li>
+      <li class="panda" style="--c:var(--mood-lonely)"><img src="./assets/panda/panda-lonely-512.png" alt="熊猫孤独的表情，眼角挂着眼泪" width="150" height="202" loading="lazy"><b>孤独</b></li>
+      <li class="panda" style="--c:var(--mood-irritated)"><img src="./assets/panda/panda-irritated-512.png" alt="熊猫烦躁的表情，皱着眉头" width="150" height="202" loading="lazy"><b>烦躁</b></li>
     </ul>
   </section>
 
