@@ -1,0 +1,18 @@
+{
+  // 2026-10 起 Cloudflare 已把 Pages 置于维护模式，新项目官方指向
+  // Workers + static assets。静态资源请求同样免费，且纯 asset-only
+  // Worker（无 main）不产生 invocation 计费。
+  //
+  // 部署：npx wrangler deploy
+  // 产物域名：<name>.<subdomain>.workers.dev
+  //
+  // 注意：assets.directory 指向 build_dist.sh 生成的 dist/，
+  // 不要把仓库根当目录——那样会把 tool/ 下的脚本与备份一起发布到公网。
+  "name": "pandamood-privacy",
+  "compatibility_date": "2026-10-15",
+  "assets": {
+    "directory": "./dist",
+    // 站点自带 404.html，必须显式声明；Workers 不像 Pages 会自动猜
+    "not_found_handling": "404-page"
+  }
+}

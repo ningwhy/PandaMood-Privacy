@@ -27,6 +27,9 @@ README.md               本文件
 
 ## 目标正式域名
 
+⚠️ 下表是**当前已写进 ASC 的取值**（Pages 形态域名）。部署到 Workers 后域名
+会变成 `*.workers.dev`，**必须同步改这三处并 `--urls-only` 回刷**，否则是死链。
+
 `https://panda-mood-diary-privacy.pages.dev`
 
 | URL | 指向 |
@@ -36,20 +39,42 @@ README.md               本文件
 | `https://panda-mood-diary-privacy.pages.dev/privacy/zh-Hans.html` | 隐私政策（zh-Hans） |
 | `https://panda-mood-diary-privacy.pages.dev/privacy/en.html` | 隐私政策（en-AU / en-GB） |
 
-## 部署（Cloudflare Pages）
+## 部署（Cloudflare Workers + static assets）
 
-纯静态站，无构建步骤 —— 把**仓库根目录**作为 Pages 输出目录。
+> ⚠️ **2026-10 起 Pages 已进维护模式**，这不是你的账号坏了。
+> Cloudflare 官方文档开头就挂着 "Are You Sure You Want to Use Pages?"，
+> 新建流程被统一引到 Workers：表现为创建页缺少 Framework preset /
+> Build output directory、强制 `.workers.dev` 域名、Pages 入口被藏。
+> 官方口径：Pages 仍能跑、未宣布下线，但**新项目请走 Workers**。
 
 ```bash
-wrangler login
-wrangler pages deploy . --project-name=panda-mood-diary-privacy --branch=main
+wrangler login            # 首次需要 OAuth 授权
+sh tool/build_dist.sh     # 生成 dist/（29 文件 / 2.9 MB）
+wrangler deploy           # 读取 wrangler.jsonc，发布 dist/
 ```
 
-或 Dashboard：Workers & Pages → Create → Pages → Upload assets，Project name 填
-`panda-mood-diary-privacy`，上传仓库根目录内容。
+产物域名：`https://pandamood-privacy.<你的 subdomain>.workers.dev`
 
-⚠️ `index.html` 在根目录：Pages 会对 `privacy/zh-Hans.html` 自动加尾斜杠规则，
-`/privacy/zh-Hans`（无 `.html`）也能命中，无需重写规则。
+🔴 **必须走 `tool/build_dist.sh`，不要把仓库根当输出目录**：
+根目录里有 `tool/`（ASC 脚本 + 备份 JSON），而 assets 目录会被**原样发布**，
+那等于把脚本源码挂到公网。脚本用的是白名单复制，不是黑名单排除，
+漏文件会直接体现在文件数上（29），比排除法好验证。
+
+两个与 Pages 的行为差异，已写进 `wrangler.jsonc`：
+
+| 项 | Pages | Workers |
+|---|---|---|
+| 输出目录 | 自动识别 | 必须显式 `assets.directory` |
+| 404 行为 | 自动猜（看有无 404.html） | 必须显式 `not_found_handling: "404-page"` |
+| `_headers` | 生效 | **同样生效**，CSP 无需改动 |
+| 域名 | `*.pages.dev` | `*.workers.dev` |
+
+静态资源请求依旧免费；本项目是 asset-only Worker（无 `main`），
+不产生 invocation 计费。
+
+⚠️ 上线拿到真实域名后，**必须回填 ASC 的三个 URL**（隐私 / 支持 / 营销），
+见下方 ASC 章节 `python3 tool/asc_metadata.py --urls-only`。
+填成未部署的域名是死链，审核必挂。
 
 ## ASC 现状与回填（2026-10-15 实测，非推测）
 
