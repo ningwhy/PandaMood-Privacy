@@ -46,6 +46,7 @@
     </a>
     <span class="nav-links">
       <a href="#moods">心情</a>
+      <a href="#expressions">熊猫</a>
       <a href="#features">功能</a>
       <a href="#privacy">隐私</a>
       <a href="#get">下载</a>
@@ -79,37 +80,12 @@
       <span class="panda-float a"><img src="./assets/icons/mood-happy.svg" alt="" width="34" height="34"></span>
       <span class="panda-float b"><img src="./assets/icons/mood-calm.svg" alt="" width="28" height="28"></span>
       <span class="panda-float c"><img src="./assets/icons/mood-fulfilled.svg" alt="" width="30" height="30"></span>
-        <svg class="panda-body" viewBox="0 0 200 200">
-          <!-- 耳朵 -->
-          <circle cx="58" cy="42" r="26" fill="var(--panda-ink, #2B2622)"/>
-          <circle cx="142" cy="42" r="26" fill="var(--panda-ink, #2B2622)"/>
-          <!-- 头 -->
-          <circle cx="100" cy="92" r="62" fill="var(--panda-white, #fff)" stroke="var(--panda-ink, #2B2622)" stroke-width="5"/>
-          <!-- 黑眼圈 -->
-          <ellipse cx="74" cy="84" rx="21" ry="24" fill="var(--panda-ink, #2B2622)" transform="rotate(-16 74 84)"/>
-          <ellipse cx="126" cy="84" rx="21" ry="24" fill="var(--panda-ink, #2B2622)" transform="rotate(16 126 84)"/>
-          <circle cx="75.5" cy="85" r="7.2" fill="var(--panda-white, #fff)"/>
-          <circle cx="126" cy="85" r="7.2" fill="var(--panda-white, #fff)"/>
-          <circle cx="77" cy="86.5" r="3.6" fill="var(--panda-ink, #2B2622)"/>
-          <circle cx="127.5" cy="86.5" r="3.6" fill="var(--panda-ink, #2B2622)"/>
-          <!-- 鼻子与嘴 -->
-          <path d="M89 112c0-4.6 4.6-8 10-8s10 3.4 10 8-4.6 7.4-10 7.4-10-2.8-10-7.4Z" fill="var(--panda-ink, #2B2622)"/>
-          <path d="M99 119.4v6M99 125.4c-4.2 0-7.6-2.6-9-6.2M99 125.4c4.2 0 7.6-2.6 9-6.2"
-                fill="none" stroke="var(--panda-ink, #2B2622)" stroke-width="4.6" stroke-linecap="round"/>
-          <!-- 腮红 -->
-          <ellipse cx="46" cy="112" rx="11" ry="7" fill="#F2B33D" opacity=".42"/>
-          <ellipse cx="154" cy="112" rx="11" ry="7" fill="#F2B33D" opacity=".42"/>
-          <!-- 抱着的日记本 -->
-          <rect x="52" y="142" width="96" height="66" rx="7" fill="var(--panda-paper, #FDFBF7)" stroke="var(--panda-ink, #2B2622)" stroke-width="4.5"/>
-          <line x1="100" y1="146" x2="100" y2="204" stroke="var(--panda-ink, #2B2622)" stroke-width="4"/>
-          <line x1="66" y1="160" x2="88" y2="160" stroke="#B9AE9C" stroke-width="4.5" stroke-linecap="round"/>
-          <line x1="66" y1="174" x2="88" y2="174" stroke="#B9AE9C" stroke-width="4.5" stroke-linecap="round"/>
-          <line x1="112" y1="160" x2="134" y2="160" stroke="#B9AE9C" stroke-width="4.5" stroke-linecap="round"/>
-          <line x1="112" y1="174" x2="128" y2="174" stroke="#B9AE9C" stroke-width="4.5" stroke-linecap="round"/>
-          <!-- 爪子 -->
-          <ellipse cx="49" cy="168" rx="13" ry="10" fill="var(--panda-ink, #2B2622)"/>
-          <ellipse cx="151" cy="168" rx="13" ry="10" fill="var(--panda-ink, #2B2622)"/>
-        </svg>
+        <!-- 熊猫插画：Qwen Image 2.1 生成 + rembg 抠成透明 PNG。
+             同一张图在浅色/暗色下都可用（无底色），所以不需要 <picture> 分版。
+             参数与 7 个表情的复现方式见 assets/panda/GENERATION.md。 -->
+        <img class="panda-body" src="./assets/panda/panda-hero-512.png"
+             width="512" height="512" loading="eager" decoding="async"
+             alt="一只抱着日记本的卡通熊猫坐在地上，对着你微笑">
       </div>
     </div>
   </section>
@@ -146,6 +122,20 @@
         <span class="face"><img src="./assets/icons/mood-irritated.svg" alt="" width="34" height="34"></span>
         <b>烦躁</b><i>一点就着</i>
       </li>
+    </ul>
+  </section>
+
+  <section id="expressions">
+    <h2>同一只熊猫，七种心情</h2>
+    <p class="section-lead">App 里选哪个，首页就露出哪一只。不需要你写任何字，点一下就算今天记完了。</p>
+    <ul class="pandas">
+      <li class="panda" style="--c:var(--mood-happy)"><img src="./assets/panda/panda-happy-512.png" alt="熊猫开心的表情" width="200" height="200" loading="lazy"><b>开心</b></li>
+      <li class="panda" style="--c:var(--mood-calm)"><img src="./assets/panda/panda-calm-512.png" alt="熊猫平静的表情" width="200" height="200" loading="lazy"><b>平静</b></li>
+      <li class="panda" style="--c:var(--mood-fulfilled)"><img src="./assets/panda/panda-fulfilled-512.png" alt="熊猫充实的表情" width="200" height="200" loading="lazy"><b>充实</b></li>
+      <li class="panda" style="--c:var(--mood-surprised)"><img src="./assets/panda/panda-surprised-512.png" alt="熊猫惊喜的表情" width="200" height="200" loading="lazy"><b>惊喜</b></li>
+      <li class="panda" style="--c:var(--mood-low)"><img src="./assets/panda/panda-low-512.png" alt="熊猫低落的表情" width="200" height="200" loading="lazy"><b>低落</b></li>
+      <li class="panda" style="--c:var(--mood-lonely)"><img src="./assets/panda/panda-lonely-512.png" alt="熊猫孤独的表情，头顶一朵小云" width="200" height="200" loading="lazy"><b>孤独</b></li>
+      <li class="panda" style="--c:var(--mood-irritated)"><img src="./assets/panda/panda-irritated-512.png" alt="熊猫烦躁的表情，旁边有几道闪电" width="200" height="200" loading="lazy"><b>烦躁</b></li>
     </ul>
   </section>
 

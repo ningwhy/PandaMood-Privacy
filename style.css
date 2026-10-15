@@ -261,7 +261,14 @@ a { color: var(--brand); }
   width: min(100%, 300px);
 }
 
-.panda-hero svg { width: min(100%, 330px); height: auto; display: block; }
+/* Hero 熊猫是一张抠成透明的 PNG（浅/暗共用，无底色）。
+   保持等比且不去掉圆角——透明底图上圆角只会切到熊猫本体。 */
+.panda-hero img {
+  width: min(100%, 330px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 
 .panda-float {
   position: absolute;
@@ -291,6 +298,61 @@ a { color: var(--brand); }
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-9px); }
   }
+}
+
+/* ---------- 7 只熊猫表情（Qwen Image 2.1 生成 + rembg 抠成透明 PNG） ---------- */
+
+/* 7 只熊猫要能排成整行：auto-fit 在 1080px 下会算出 6 列，
+   把第 7 只挤到第二行单独一行，非常难看。
+   改用固定 7 列，窄屏再按断点降列（7 → 4 → 2）。 */
+.pandas {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 12px;
+  margin: 26px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 900px) {
+  .pandas { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .pandas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.panda {
+  margin: 0;
+  text-align: center;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 10px 8px 12px;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.panda:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px -16px rgba(0, 0, 0, .4);
+}
+
+.panda img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* 图本身已透明，这里只给个极淡的暖色晕，凸显轮廓 */
+  background: radial-gradient(circle at 50% 78%,
+    color-mix(in srgb, var(--c) 13%, transparent), transparent 68%);
+  border-radius: 14px;
+}
+
+.panda b {
+  display: block;
+  margin-top: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--c);
 }
 
 /* ---------- 卡片 ---------- */
