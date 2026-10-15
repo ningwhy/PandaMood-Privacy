@@ -3,9 +3,9 @@
 
 用法
 ----
-    export ASC_KEY_ID=4MKHDZ8JT4
-    export ASC_ISSUER_ID=6438b8b8-6f7c-4701-b2d3-543a1f24bc4a
-    export ASC_KEY_PATH=~/.appstoreconnect/private_keys/AuthKey_4MKHDZ8JT4.p8
+    export ASC_KEY_ID=<你的 Key ID>
+    export ASC_ISSUER_ID=<你的 Issuer ID>
+    export ASC_KEY_PATH=~/.appstoreconnect/private_keys/AuthKey_<KEY_ID>.p8
     /opt/homebrew/bin/python3 asc_metadata.py --check     # 只校验，不写
     /opt/homebrew/bin/python3 asc_metadata.py --urls-only # 只写 URL（部署后用）
     /opt/homebrew/bin/python3 asc_metadata.py             # 全量写入
