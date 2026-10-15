@@ -14,6 +14,7 @@
      深色/浅色档由此推导，保证按钮、链接、徽章同一色相。 */
   --brand: #FE6655;          /* 老版 logo 主背景 */
   --brand-deep: #D8433A;    /* hover / 强调 */
+  --brand-lift: #FE6655;    /* 浅色下与正色相同（变量统一存在，暗色再提亮） */
   --brand-soft: #FFF0EE;    /* 浅色底 */
   --panda-ink: #3E3E3E;     /* 老版 logo 的黑眼圈色 */
   --panda-white: #FFFFFF;
@@ -39,7 +40,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --brand: #FF8878;          /* logo 色在暗底上的提亮档 */
+    --brand: #FE6655;          /* 暗色也用正色：按钮填充与 logo 严格一致 */
+    --brand-lift: #FF8878;     /* 文字/链接的提亮档（正色在深底发闷） */
     --brand-deep: #FFA79A;
     --brand-soft: #3A1F1D;
     --panda-ink: #3a3f46;   /* 暗色下纯黑会和背景糊在一起，抬到 #3a3f46 */
@@ -116,7 +118,7 @@ body {
   transition: color .15s;
 }
 
-.nav-links a:hover, .nav-links a.on { color: var(--brand); }
+.nav-links a:hover, .nav-links a.on { color: var(--brand-lift, var(--brand)); }
 
 /* ---------- 主体 ---------- */
 
@@ -207,7 +209,7 @@ li { margin: 6px 0; }
 
 hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0 8px; }
 
-a { color: var(--brand); }
+a { color: var(--brand-lift, var(--brand)); }
 
 /* ---------- 心情卡（App 里的 7 个心情，逐一对齐 Mood 枚举与色值） ---------- */
 
@@ -459,7 +461,7 @@ a { color: var(--brand); }
 .btn svg { width: 19px; height: 19px; }
 
 @media (prefers-color-scheme: dark) {
-  .btn { color: #0d1211; }
+  .btn { color: #fff; }  /* 正色底上白字，与浅色口径一致 */
 }
 
 .cta-block {
@@ -485,4 +487,4 @@ footer {
 }
 
 footer a { color: var(--ink-soft); text-decoration: none; margin: 0 4px; }
-footer a:hover { color: var(--brand); }
+footer a:hover { color: var(--brand-lift, var(--brand)); }
