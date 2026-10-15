@@ -39,28 +39,47 @@ README.md               本文件
 | `https://panda-mood-diary-privacy.pages.dev/privacy/zh-Hans.html` | 隐私政策（zh-Hans） |
 | `https://panda-mood-diary-privacy.pages.dev/privacy/en.html` | 隐私政策（en-AU / en-GB） |
 
-## 部署（Cloudflare Workers + static assets）
-
-> ⚠️ **2026-10 起 Pages 已进维护模式**，这不是你的账号坏了。
-> Cloudflare 官方文档开头就挂着 "Are You Sure You Want to Use Pages?"，
-> 新建流程被统一引到 Workers：表现为创建页缺少 Framework preset /
-> Build output directory、强制 `.workers.dev` 域名、Pages 入口被藏。
-> 官方口径：Pages 仍能跑、未宣布下线，但**新项目请走 Workers**。
+## 部署
 
 ```bash
-wrangler login            # 首次需要 OAuth 授权
-sh tool/build_dist.sh     # 生成 dist/（29 文件 / 2.9 MB）
-wrangler deploy           # 读取 wrangler.jsonc，发布 dist/
+sh tool/deploy.sh login     # 首次：浏览器 OAuth 授权
+sh tool/deploy.sh pages     # 部署到 Cloudflare Pages，域名 *.pages.dev
 ```
 
-产物域名：`https://pandamood-privacy.<你的 subdomain>.workers.dev`
+脚本封装了 wrangler 的真实路径 —— 它装在本机隔离的 node workspace 里，
+没有全局安装，直接敲 `wrangler` 会 command not found。
+
+### Dashboard 里找不到 Pages 创建入口
+
+2026-10 起 Cloudflare 把 Pages 的 Dashboard 入口藏进了 Workers 流程，
+官方文档也挂上了 "Are You Sure You Want to Use Pages?" 劝退横幅。
+但 **Pages 本身没有被砍**：`wrangler pages project create` /
+`wrangler pages deploy` 全部照常工作，压根不经过 Dashboard。
+
+三条路任选：
+
+| 路线 | 做法 | 域名 |
+|---|---|---|
+| CLI 建 Pages（推荐） | `sh tool/deploy.sh pages` | `*.pages.dev` |
+| Workers static assets | `sh tool/deploy.sh workers` | `*.workers.dev` |
+| Dashboard 直达链接 | 见下方 | `*.pages.dev` |
+
+Dashboard 直达链接（按钮被藏了，但路由还在）：
+
+```text
+https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/pages
+```
+
+### 产物与安全
 
 🔴 **必须走 `tool/build_dist.sh`，不要把仓库根当输出目录**：
 根目录里有 `tool/`（ASC 脚本 + 备份 JSON），而 assets 目录会被**原样发布**，
 那等于把脚本源码挂到公网。脚本用的是白名单复制，不是黑名单排除，
 漏文件会直接体现在文件数上（29），比排除法好验证。
 
-两个与 Pages 的行为差异，已写进 `wrangler.jsonc`：
+`dist/`：29 个文件 / 2.9 MB。已加入 `.gitignore`。
+
+### Pages 与 Workers 的行为差异
 
 | 项 | Pages | Workers |
 |---|---|---|
@@ -69,11 +88,11 @@ wrangler deploy           # 读取 wrangler.jsonc，发布 dist/
 | `_headers` | 生效 | **同样生效**，CSP 无需改动 |
 | 域名 | `*.pages.dev` | `*.workers.dev` |
 
-静态资源请求依旧免费；本项目是 asset-only Worker（无 `main`），
+两者静态资源请求都免费；Workers 路线是 asset-only（无 `main`），
 不产生 invocation 计费。
 
-⚠️ 上线拿到真实域名后，**必须回填 ASC 的三个 URL**（隐私 / 支持 / 营销），
-见下方 ASC 章节 `python3 tool/asc_metadata.py --urls-only`。
+⚠️ 拿到真实域名后，**必须回填 ASC 的三个 URL**（隐私 / 支持 / 营销）：
+`python3 tool/asc_metadata.py --urls-only`。
 填成未部署的域名是死链，审核必挂。
 
 ## ASC 现状与回填（2026-10-15 实测，非推测）
