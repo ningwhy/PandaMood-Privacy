@@ -1,28 +1,47 @@
 /* 熊猫心情日记官网 / 法务站样式
    设计基调：安静、克制、不打扰 —— 与 App「树洞」气质一致。
-   零外部资源（无字体 CDN、无 JS），CSP script-src 'none' 下也能完整渲染。 */
+   零外部资源（无字体 CDN、无 JS），CSP script-src 'none' 下也能完整渲染。
+   颜色与心情数值取自 App 源码 lib/data/models/mood.dart 与 lib/theme/app_theme.dart，
+   保证站点与 App 视觉同一套语言。 */
 
 :root {
-  --brand: #2f6f62;          /* 熊猫竹青 */
+  --brand: #2f6f62;          /* 熊猫竹青（App 主色） */
+  --brand-deep: #245449;
   --brand-soft: #e8f2ef;
+  --panda-ink: #2b2b33;
+  --panda-white: #fdfdfd;
+  --panda-paper: #fdfbf7;   /* 熊猫抱的日记本 */
   --ink: #1f2328;
   --ink-soft: #57606a;
   --line: #e3e8ea;
   --bg: #ffffff;
   --bg-soft: #f7faf9;
   --radius: 16px;
-  --maxw: 940px;
+  --maxw: 980px;
+
+  /* 心情色 —— 与 mood.dart 的 Mood.color 逐一对齐 */
+  --mood-happy: #F2B33D;
+  --mood-calm: #8FBF9F;
+  --mood-fulfilled: #7EA8D8;
+  --mood-surprised: #B79BD8;
+  --mood-low: #8C9AAB;
+  --mood-lonely: #7D8AA0;
+  --mood-irritated: #D98C7A;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --brand: #7fc8b6;
+    --brand-deep: #9ad8c8;
+    --brand-soft: #1c2a27;
+    --panda-ink: #3a3f46;   /* 暗色下纯黑会和背景糊在一起，抬到 #3a3f46 */
+    --panda-white: #e9eceb;
+    --panda-paper: #22292c;
     --ink: #e8eceb;
     --ink-soft: #a8b2ae;
     --line: #2a3230;
     --bg: #101514;
     --bg-soft: #161d1b;
-    --brand: #7fc8b6;
-    --brand-soft: #1c2a27;
   }
 }
 
@@ -52,7 +71,7 @@ body {
 .site-head nav {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 14px 24px;
+  padding: 12px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -60,13 +79,25 @@ body {
   flex-wrap: wrap;
 }
 
-.brand { font-weight: 700; color: var(--ink); text-decoration: none; }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand svg { width: 30px; height: 30px; display: block; }
+
+.brand-mark { flex: none; }
 
 .nav-links a {
   color: var(--ink-soft);
   text-decoration: none;
   margin-left: 18px;
   font-size: 15px;
+  transition: color .15s;
 }
 
 .nav-links a:hover, .nav-links a.on { color: var(--brand); }
@@ -75,33 +106,73 @@ body {
 
 main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 72px; }
 
-.hero { padding: 76px 0 40px; }
+section { position: relative; }
+
+.hero {
+  padding: 64px 0 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 44px;
+  align-items: center;
+}
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 44px; }
+}
 
 .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--brand);
-  font-size: 14px;
-  letter-spacing: .08em;
+  font-size: 13px;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
+  background: var(--brand-soft);
+  padding: 5px 13px;
+  border-radius: 999px;
 }
 
 h1 {
-  font-size: clamp(30px, 5.2vw, 46px);
-  line-height: 1.28;
-  margin: 0 0 20px;
-  letter-spacing: -.01em;
+  font-size: clamp(30px, 5.4vw, 46px);
+  line-height: 1.26;
+  margin: 0 0 18px;
+  letter-spacing: -.015em;
 }
 
 h2 {
   font-size: clamp(21px, 3.2vw, 27px);
   line-height: 1.4;
-  margin: 56px 0 16px;
+  margin: 58px 0 14px;
   letter-spacing: -.005em;
 }
 
 h3 { font-size: 17px; margin: 0 0 8px; }
 
-.lead { font-size: 18px; color: var(--ink-soft); margin: 0 0 24px; }
+.lead { font-size: 18px; color: var(--ink-soft); margin: 0 0 22px; max-width: 46ch; }
+
+.section-lead { color: var(--ink-soft); margin: 0 0 8px; max-width: 56ch; }
+
+/* Hero 底部的四条承诺，与隐私区的四张卡一一呼应 */
+.hero-badges {
+  list-style: none;
+  padding: 0;
+  margin: 26px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.hero-badges li {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 999px;
+  padding: 5px 13px;
+  font-weight: 600;
+}
 
 .meta { color: var(--ink-soft); font-size: 14px; margin: 32px 0 8px; }
 
@@ -122,11 +193,111 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0 8px; }
 
 a { color: var(--brand); }
 
+/* ---------- 心情卡（App 里的 7 个心情，逐一对齐 Mood 枚举与色值） ---------- */
+
+.moods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 12px;
+  margin: 26px 0 8px;
+  /* 🔴 全局有 ul{padding-left:22px}，不清掉会在卡片左侧漏出默认项目符号圆点 */
+  padding: 0;
+  list-style: none;
+}
+
+.mood {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px 10px 14px;
+  text-align: center;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.mood:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, .35);
+}
+
+.mood .face {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  /* 底色由 HTML 内联的 --c（= Mood.color）派生，rgba 无法直接用 hex+alpha，
+     故用 color-mix 之外退而求其次：色值以 rgb 三通道写在 --c-rgb 里太啰嗦，
+     这里统一用 color-mix，兼容性已由现代 Safari/Chrome 保证。 */
+  background: color-mix(in srgb, var(--c) 26%, transparent);
+}
+
+.mood b { display: block; font-size: 14px; font-weight: 600; }
+
+.mood i {
+  display: block;
+  font-style: normal;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+/* ---------- 熊猫插画 ---------- */
+
+/* 🔴 grid item 默认 min-width:auto，窄列下会把 SVG 压到内容宽以下，
+   表现为熊猫被缩小、日记本被裁。这里显式给宽度并禁用压缩。 */
+.hero-art {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+}
+
+.panda-hero {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: min(100%, 300px);
+}
+
+.panda-hero svg { width: min(100%, 330px); height: auto; display: block; }
+
+.panda-float {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 20px -12px rgba(0, 0, 0, .4);
+}
+
+/* 偏移量必须留出安全边距：
+   .panda-hero 的高度由 230px 宽的 SVG 决定，若百分比贴边（top:0 / left:0），
+   圆形会溢出到导航栏和 Hero 文案上（实测飘到页头、压住徽章）。 */
+.panda-float.a { top: 6%; left: -4%; }
+.panda-float.b { top: 38%; right: -4%; }
+.panda-float.c { bottom: 8%; left: 2%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .panda-float { animation: bob 4.5s ease-in-out infinite; }
+  .panda-float.b { animation-delay: -1.5s; }
+  .panda-float.c { animation-delay: -3s; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-9px); }
+  }
+}
+
 /* ---------- 卡片 ---------- */
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
   gap: 16px;
   margin: 22px 0 8px;
 }
@@ -138,23 +309,69 @@ a { color: var(--brand); }
   padding: 20px 22px;
 }
 
+/* 功能卡里的标签：与心情卡同源，用 --c 上色，避免 emoji */
+.cards article .ico {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin-bottom: 9px;
+  padding: 3px 11px;
+  border-radius: 999px;
+  color: var(--c, var(--brand-deep));
+  background: color-mix(in srgb, var(--c, var(--brand)) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c, var(--brand)) 32%, transparent);
+}
+
 .cards p { margin: 0; color: var(--ink-soft); font-size: 15px; }
 
 .feature-block p { max-width: 68ch; }
 
+/* ---------- 真实截图 ---------- */
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(212px, 1fr));
+  gap: 18px;
+  margin: 24px 0 8px;
+}
+
+.shots figure { margin: 0; text-align: center; }
+
+.shots img {
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  display: block;
+  background: var(--bg-soft);
+}
+
+.shots figcaption {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin-top: 9px;
+}
+
 /* ---------- CTA ---------- */
 
-.cta { margin: 28px 0 8px; }
+.cta { margin: 26px 0 8px; }
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   background: var(--brand);
   color: #fff;
   text-decoration: none;
-  padding: 13px 26px;
+  padding: 14px 28px;
   border-radius: 999px;
   font-weight: 600;
+  transition: background .15s, transform .15s;
 }
+
+.btn:hover { background: var(--brand-deep); transform: translateY(-1px); }
+
+.btn svg { width: 19px; height: 19px; }
 
 @media (prefers-color-scheme: dark) {
   .btn { color: #0d1211; }
@@ -163,18 +380,14 @@ a { color: var(--brand); }
 .cta-block {
   background: var(--bg-soft);
   border: 1px solid var(--line);
-  border-radius: calc(var(--radius) + 6px);
-  padding: 40px 32px;
-  margin-top: 56px;
+  border-radius: calc(var(--radius) + 8px);
+  padding: 46px 32px;
+  margin-top: 58px;
   text-align: center;
 }
 
 .cta-block h2 { margin-top: 0; }
-
-.cta-block .note {
-  background: transparent;
-  padding: 12px 0 0;
-}
+.cta-block .note { background: transparent; padding: 14px 0 0; }
 
 /* ---------- 页脚 ---------- */
 
@@ -187,3 +400,4 @@ footer {
 }
 
 footer a { color: var(--ink-soft); text-decoration: none; margin: 0 4px; }
+footer a:hover { color: var(--brand); }
