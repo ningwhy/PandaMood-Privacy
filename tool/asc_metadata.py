@@ -38,8 +38,9 @@ SITE = "https://panda-mood-diary-privacy.pages.dev"
 #    - appInfoLocalizations（App 级）只有：name / subtitle / privacyPolicyUrl
 #    - appStoreVersionLocalizations（版本级）才有：description / keywords /
 #      promotionalText / whatsNew / privacyPolicyUrl / supportUrl / marketingUrl
-#    ⚠️ memory 铁律「隐私 URL 只能 App 级填」在本账号实测**不成立** ——
-#    版本级的 privacyPolicyUrl 也存在且可填。两级都要填，只填一套审核会看到另一套的旧值。
+#    ⚠️ 实测（2026-10-15 v2.0 创建后复核）：版本级 privacyPolicyUrl 写入 409，
+#    **隐私 URL 只能 App 级填**（memory 铁律成立）。
+#    之前「版本级也能填」是误读——字段存在不代表可写。
 #
 # 2) PATCH 是**原子**的：一个非法字段（如把 keywords 塞进 appInfoLocalizations）
 #    会让**整批**字段全部不生效，只报 409 ENTITY_ERROR.ATTRIBUTE.UNKNOWN。
@@ -78,7 +79,7 @@ ZH = {
 想写的时候，再打开碎碎念。
 
 ■ 心情记录，点一下就够
-九个心情选一个，今天就算记完。也可以加一句话、勾几个影响因素（睡得好、运动了、见了朋友……），一分钟内完成。
+七个心情选一个，今天就算记完。也可以加一句话、勾几个影响因素（睡得好、运动了、见了朋友……），一分钟内完成。
 
 ■ 时间线，想写再写
 不想写也没关系。写日记时支持配图、草稿自动保存，写到一半退出不会丢。全部日记按时间排列，支持关键词搜索。
@@ -124,7 +125,7 @@ EN = {
 When you want to write more, open the journal.
 
 ■ Logging a mood takes one tap
-Pick one of nine moods and the day is done. You can add a sentence and tick a few factors (slept well, exercised, saw friends…) — under a minute.
+Pick one of the seven moods and the day is done. You can add a sentence and tick a few factors (slept well, exercised, saw friends…) — under a minute.
 
 ■ A timeline for the days you want to write
 No pressure to write. Entries can include photos, and drafts save automatically, so leaving halfway never loses your words. Everything is in one timeline, with keyword search.
@@ -188,11 +189,20 @@ COPY = {"zh-Hans": ZH, "en-AU": EN, "en-GB": EN}
 
 # ---------------------------------------------------------------- 工具
 
-def app_info_id(c: AscClient) -> str:
+def app_info_id(c: AscClient, editable: bool = False) -> str:
+    """🔴 关键：App 有两个 appInfo——
+    1. 绑定已发布 1.0 的（data[0]）→ 全字段锁定
+    2. 随待提交版本创建的可编辑副本（data[1]）→ 才是能 PATCH 的那个
+    取 data[0] 会永远撞 "can not be modified in the current state"。
+    """
     r = c.get(f"/apps/{APP_ID}/appInfos", params={"limit": 10})
     data = r.get("data", [])
     if not data:
         raise SystemExit("查不到 appInfos")
+    if editable:
+        if len(data) < 2:
+            raise SystemExit("只有 1 个 appInfo（无待提交版本），无可编辑副本")
+        return data[1]["id"]
     return data[0]["id"]
 
 
