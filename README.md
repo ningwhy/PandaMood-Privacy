@@ -25,19 +25,24 @@ README.md               本文件
 本项目**没有生成器**：文案量可控（4 个页面），手写更直白，也避免「改生成物不改源」的漂移。
 若日后扩到 5+ 语种，再引入 `build_legal_site.py` 范式（见 `~/Documents/App/drawing-privacy`）。
 
-## 目标正式域名
+## 正式域名（已上线）
 
-⚠️ 下表是**当前已写进 ASC 的取值**（Pages 形态域名）。部署到 Workers 后域名
-会变成 `*.workers.dev`，**必须同步改这三处并 `--urls-only` 回刷**，否则是死链。
-
-`https://panda-mood-diary-privacy.pages.dev`
+`https://pandamood.pages.dev`
 
 | URL | 指向 |
 |---|---|
-| `https://panda-mood-diary-privacy.pages.dev/` | 产品官网 ← `marketingUrl` |
-| `https://panda-mood-diary-privacy.pages.dev/support/index.html` | 支持页 ← `supportUrl` |
-| `https://panda-mood-diary-privacy.pages.dev/privacy/zh-Hans.html` | 隐私政策（zh-Hans） |
-| `https://panda-mood-diary-privacy.pages.dev/privacy/en.html` | 隐私政策（en-AU / en-GB） |
+| `https://pandamood.pages.dev/` | 产品官网 ← `marketingUrl` |
+| `https://pandamood.pages.dev/support/index.html` | 支持页 ← `supportUrl` |
+| `https://pandamood.pages.dev/privacy/zh-Hans.html` | 隐私政策（zh-Hans）← `privacyPolicyUrl` |
+| `https://pandamood.pages.dev/privacy/en.html` | 隐私政策（en-AU / en-GB）← `privacyPolicyUrl` |
+
+4 个 URL 已全部 HTTP 200 实测，并已回刷进 ASC 共 9 处
+（App 级 privacyPolicyUrl x 3 locale + 版本级 support/marketing x 3 locale），
+旧域名零残留。
+
+🔴 **以后换域名必须重跑两步**，只跑一步会漏：
+1. `python3 tool/asc_metadata.py --urls-only` —— 只覆盖 App 级隐私 URL
+2. 版本级 `supportUrl` / `marketingUrl` 要单独 PATCH，`--urls-only` **不覆盖**这两层
 
 ## 部署
 
@@ -162,7 +167,8 @@ python3 tool/asc_metadata.py --urls-only       # 只写 URL（**站点部署后�
 写入前快照存 `tool/backup/appInfoLocalizations_before.json`，可回滚。
 
 ⚠️ `--urls-only` 在站点部署前不要跑 —— privacy URL 指向
-`panda-mood-diary-privacy.pages.dev`，未部署就是死链，审核必挂。
+`pandamood.pages.dev`，未部署就是死链，审核必挂。
+（2026-10-15 站点已上线并回刷完成，此条已解除。）
 
 ## 内容合规约束（修改前必读）
 

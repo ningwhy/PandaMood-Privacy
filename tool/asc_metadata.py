@@ -29,7 +29,7 @@ sys.path.insert(0, str(Path.home() / ".workbuddy/skills/ios-app-store-pipeline/s
 from asc_client import AscClient, AscError  # noqa: E402
 
 APP_ID = "1506120121"
-SITE = "https://panda-mood-diary-privacy.pages.dev"
+SITE = "https://pandamood.pages.dev"
 
 # ====================================================================
 # 🔴 本账号 ASC 元数据可写性实测结论（2026-10-15，写脚本前先用 API 验证过）
@@ -409,7 +409,8 @@ def main() -> None:
         print("⚠️  模式：只写文案，不写 URL（站点未部署，privacy URL 会是死链）\n")
 
     c = AscClient()
-    info_id = app_info_id(c)
+    # 🔴 必须取可编辑副本：data[0] 是已发布 1.0 的 appInfo，全字段锁定
+    info_id = app_info_id(c, editable=True)
     locs = loc_ids(c, info_id)
     print(f"appInfo={info_id}  locales={sorted(locs.keys())}\n")
 

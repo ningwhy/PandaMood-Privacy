@@ -18,7 +18,7 @@ set -e
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
 
-PROJECT=panda-mood-diary-privacy
+PROJECT=pandamood
 
 if command -v wrangler >/dev/null 2>&1; then
   WRANGLER=wrangler
