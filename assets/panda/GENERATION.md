@@ -89,13 +89,43 @@ Only the facial expression changes. Do not add any extra objects, symbols, icons
 | panda-lonely | lonely and wistful: eyes looking slightly to the side, one eyebrow slightly raised, small quiet mouth, a single small teardrop at the corner of one eye | 8104 | 孤独 |
 | panda-irritated | irritated and annoyed: sharply furrowed angled eyebrows, narrowed eyes, small tense straight-line mouth | 8105 | 烦躁 |
 
-## 四、动态 idle 循环
+## 四、动态 idle 循环（绿幕色键管线，推荐）
+
+**为什么用绿幕而不是直接生成品牌色底**：AI 模型对色值保真度不稳定
+——直接生成 `#FE6655` 底，实测出来是 `#E35D43`（偏橙），只能事后逐帧
+「底色邻域平移」补救。绿幕管线把「保色」从生成阶段挪到合成阶段，
+底色由代码钉死，一次到位，且熊猫主体完全不被触碰。
+
+三步：
 
 ```bash
-$SCRIPT video --input v3_happy-01.png --mode i2v \
-  --prompt "A cute flat-vector cartoon panda sits holding an open diary notebook, on a flat solid warm coral red background #FE6655. The panda blinks its eyes once slowly, then its chest rises and falls gently like calm breathing, then it smiles softly and returns exactly to its starting pose. The camera holds perfectly steady with no movement, no zoom, no pan. ... Audio: N/A, no music, no sound." \
-  --aspect 1:1 --name panda_idle_v3
+# 1. edit 基准图成纯绿幕底（只换背景，身份全锁）
+$SCRIPT qwen21 --variant edit --image v3_happy-01.png \
+  --prompt "Replace the background of <image1> with a perfectly flat ... pure chroma key green screen #00FF00. Keep the panda completely unchanged: ... Only the background color changes." \
+  --seed 8201 --name green_base
+
+# 2. 绿幕底做 i2v（prompt 里强调背景全程不变绿）
+$SCRIPT video --input green_base-01.png --mode i2v \
+  --prompt "... on a perfectly flat pure chroma key green screen background. ... The green screen background stays perfectly flat and uniform green throughout ..." \
+  --aspect 1:1 --name panda_idle_green
+
+# 3. 色键抠像 + despill + 合成精确 #FE6655
+#    （脚本：绿溢出量法 alpha + G 压回 max(R,B) + 1px feather + 纯色合成）
 ```
+
+绿幕实测质量（管线可行的前提）：
+
+- 四角 G≈205±1.5，全程 124 帧不漂移
+- 主体白毛 G-R 差仅 1.5（生图阶段就没污染）
+- 熊猫无任何绿色元素，色键零冲突
+
+成品对比（绿幕管线 vs 直接生成+平移补救）：
+
+| 指标 | 绿幕色键 | 旧平移法 |
+|---|---|---|
+| 底色精确度 | 精确 (254,102,85) | ±3/255 |
+| 主体内绿溢出>8 占比 | **0.000%** | 0.102–0.163% |
+| 首末帧循环闭合 | 平均差 2.53 | 2.61 |
 
 短边 480 是 H3 的显存红线，不要为了清晰度调到 720 以上。
 
